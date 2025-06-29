@@ -1,8 +1,11 @@
+import { Container } from "react-bootstrap";
+import NavigationBar from "./Nav";
+
 function Home() {
     return (
         <div>
-            <h1>Welcome to the Home Page</h1>
-            <p>This is the home page of our application.</p>
+            {/* <NavigationBar/> */}
+                <h1 className="fs-4">Bienvenido a Anti-Social Net</h1>
         </div>
     );
 }
