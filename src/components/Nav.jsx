@@ -7,13 +7,23 @@ function NavigationBar() {
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand href="#">Anti-Social Net</Navbar.Brand>
+        {/* Cambié href por as={NavLink} to="/" para consistencia */}
+        <Navbar.Brand as={NavLink} to="/" className="text-decoration-none">
+          Anti-Social Net
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link as={NavLink} to="/">Inicio</Nav.Link>
-            <Nav.Link as={NavLink} to="/user">Usuario</Nav.Link>
-          </Nav>
+            <Nav.Link as={NavLink} to="/">
+              Inicio
+            </Nav.Link>
+            <Nav.Link as={NavLink} to="/user">
+              Usuario
+            </Nav.Link>
+            <Nav.Link as={NavLink} to="/tags">
+              tags
+            </Nav.Link>
+            </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>
