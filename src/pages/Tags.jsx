@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Container, Alert, Spinner, Badge, Card, Row, Col } from "react-bootstrap";
-import NavigationBar from "./Nav";
+import NavigationBar from "../components/Nav";
 
 function Tags() {
     const [tags, setTags] = useState([]);

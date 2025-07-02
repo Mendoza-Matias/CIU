@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Container, Button, Row, Col, Alert } from "react-bootstrap";
 // import { useNavigate } from "react-router-dom";
-import PostCard from "./PostCard";
+import PostCard from "../components/PostCard";
 
 function Home() {
     // const navigate = useNavigate();

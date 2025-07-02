@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Container, Card, Spinner, Alert, Row, Col, Badge } from 'react-bootstrap'
-import NavigationBar from './Nav'
+import NavigationBar from '../components/Nav'
 
 function User() {
   const [user, setUser] = useState(null)

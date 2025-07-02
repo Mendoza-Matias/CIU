@@ -1,10 +1,10 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import NavigationBar from './components/Nav'
-import Home from './components/Home'
-import User from './components/User'
+import Home from './pages/Home'
+import User from './pages/User'
 import { Routes, Route } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
-import Tags from './components/Tags'
+import Tags from './pages/Tags'
 import PostDetail from './components/PostDetail'
 
 function App() {
