@@ -1,30 +1,34 @@
-import { useState, useEffect } from "react";
-import { Container, Row, Col, Form, Button, Card, Alert, Badge } from "react-bootstrap";
+import { useState, useEffect, useContext } from "react"; // Importa useContext
+import { Container, Row, Col, Form, Button, Card, Alert, Badge, Spinner } from "react-bootstrap"; // Añade Spinner
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from '../context/AuthContext'; // Asegúrate de que la ruta sea correcta
 
 function CreatePost() {
     const navigate = useNavigate();
+    // 1. Obtén el usuario y el estado de autenticación del AuthContext
+    const { user: loggedInUser, isAuthenticated } = useContext(AuthContext);
+
     const [formData, setFormData] = useState({
         title: "",
         content: "",
         selectedTagIds: [] // IDs de tags seleccionados
     });
     const [availableTags, setAvailableTags] = useState([]);
-    const [currentUser, setCurrentUser] = useState(null);
+    // const [currentUser, setCurrentUser] = useState(null); // Ya no es necesario, usamos loggedInUser
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
 
-    // Cargar datos iniciales
+    // 2. Efecto para redirigir si el usuario no está logueado
     useEffect(() => {
-        // Simular usuario actual
-        setCurrentUser({
-            id: 1,
-            nickName: "luna",
-            email: "luna@example.com"
-        });
+        if (!isAuthenticated) {
+            navigate('/inicioSesion'); // Redirige al usuario a la página de inicio de sesión
+        }
+    }, [isAuthenticated, navigate]);
 
-        // Cargar tags disponibles
+    // Cargar datos iniciales (solo tags, ya no simulamos usuario)
+    useEffect(() => {
+        // setCurrentUser({ ... }); // ¡Eliminar esto!
         fetchAvailableTags();
     }, []);
 
@@ -35,7 +39,7 @@ function CreatePost() {
                 const tags = await response.json();
                 setAvailableTags(tags);
             } else {
-                // Fallback con tags mock
+                // Fallback con tags mock (si la API falla)
                 const mockTags = [
                     { id: 1, name: "tecnología" },
                     { id: 2, name: "programación" },
@@ -52,7 +56,7 @@ function CreatePost() {
             }
         } catch (err) {
             console.error("Error fetching tags:", err);
-            // Fallback en caso de error
+            // Fallback en caso de error de red
             const mockTags = [
                 { id: 1, name: "tecnología" },
                 { id: 2, name: "programación" },
@@ -82,7 +86,6 @@ function CreatePost() {
         }));
     };
 
-    // Función para obtener los tags seleccionados con su información completa
     const getSelectedTags = () => {
         return availableTags.filter(tag => formData.selectedTagIds.includes(tag.id));
     };
@@ -92,15 +95,21 @@ function CreatePost() {
         setLoading(true);
         setError(null);
 
+        // Asegúrate de que haya un usuario logueado antes de intentar enviar el post
+        if (!loggedInUser || !loggedInUser.id) {
+            setError("No hay un usuario logueado para crear la publicación.");
+            setLoading(false);
+            return;
+        }
+
         try {
-            // Estructura de datos para enviar (coincide con tu backend)
             const postData = {
-                description: formData.title ? `${formData.title}\n\n${formData.content}` : formData.content, // Combinar título y contenido
-                userId: currentUser.id, // camelCase como espera tu backend
-                tagIds: formData.selectedTagIds // Solo los IDs de los tags
+                description: formData.title ? `${formData.title}\n\n${formData.content}` : formData.content,
+                userId: loggedInUser.id, // ¡Usa el ID del usuario logueado!
+                tagIds: formData.selectedTagIds
             };
 
-            console.log("Datos a enviar:", postData); // Para debug
+            console.log("Datos a enviar:", postData);
 
             const response = await fetch('http://localhost:3001/posts', {
                 method: 'POST',
@@ -111,7 +120,9 @@ function CreatePost() {
             });
 
             if (!response.ok) {
-                throw new Error('Error al crear la publicación');
+                // Intenta leer el mensaje de error del backend si está disponible
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Error al crear la publicación');
             }
 
             const createdPost = await response.json();
@@ -120,7 +131,6 @@ function CreatePost() {
             setSuccess(true);
             setFormData({ title: "", content: "", selectedTagIds: [] });
             
-            // Redirigir después de 2 segundos
             setTimeout(() => {
                 navigate('/');
             }, 2000);
@@ -134,6 +144,19 @@ function CreatePost() {
 
     const isFormValid = formData.title.trim() && formData.content.trim();
 
+    // Mostrar un spinner o redirigir si no está autenticado
+    if (!isAuthenticated) {
+        return (
+            <div className="bg-light min-vh-100 py-5">
+                <Container className="mt-5 text-center">
+                    <Spinner animation="border" variant="primary" />
+                    <p className="mt-3 text-muted">Redirigiendo al inicio de sesión...</p>
+                </Container>
+            </div>
+        );
+    }
+
+    // Si isAuthenticated es true, procedemos a renderizar el formulario
     return (
         <div className="bg-light min-vh-100 py-5">
             <Container>
@@ -166,18 +189,18 @@ function CreatePost() {
                         <Card className="shadow-sm">
                             <Card.Body className="p-4">
                                 <Form onSubmit={handleSubmit}>
-                                    {/* Información del Usuario */}
-                                    {currentUser && (
+                                    {/* Información del Usuario - Ahora usa loggedInUser */}
+                                    {loggedInUser && (
                                         <div className="mb-4 p-3 bg-light rounded">
                                             <h6 className="text-muted mb-2">Publicando como:</h6>
                                             <div className="d-flex align-items-center">
                                                 <div className="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" 
-                                                     style={{width: '40px', height: '40px'}}>
-                                                    {currentUser.nickName.charAt(0).toUpperCase()}
+                                                    style={{width: '40px', height: '40px'}}>
+                                                    {loggedInUser.nickName?.charAt(0).toUpperCase()}
                                                 </div>
                                                 <div>
-                                                    <div className="fw-semibold">{currentUser.nickName}</div>
-                                                    <small className="text-muted">{currentUser.email}</small>
+                                                    <div className="fw-semibold">{loggedInUser.nickName}</div>
+                                                    <small className="text-muted">{loggedInUser.email}</small>
                                                 </div>
                                             </div>
                                         </div>

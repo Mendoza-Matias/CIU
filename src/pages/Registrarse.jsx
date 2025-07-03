@@ -88,7 +88,7 @@ function Registrarse() {
 
                 // Redirigir al login después de un breve retraso
                 setTimeout(() => {
-                    navigate('/login'); // Asume que tu ruta de login es '/login'
+                    navigate('/inicioSesion'); // Asume que tu ruta de login es '/login'
                 }, 3000); // Redirige después de 3 segundos
             } else {
                 // Errores del backend (ej. nickName o email ya existen)
