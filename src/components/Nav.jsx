@@ -21,7 +21,13 @@ function NavigationBar() {
               Usuario
             </Nav.Link>
             <Nav.Link as={NavLink} to="/tags">
-              tags
+              Tags
+            </Nav.Link>
+            <Nav.Link as={NavLink} to="/registroUsuario">
+              Registrarse
+            </Nav.Link>
+            <Nav.Link as={NavLink} to="/inicioSesion">
+              Iniciar sesión
             </Nav.Link>
             </Nav>
         </Navbar.Collapse>

@@ -7,6 +7,8 @@ import { Container } from 'react-bootstrap'
 import Tags from './pages/Tags'
 import PostDetail from './components/PostDetail'
 import CreatePost from './components/CreatePost'
+import Registrarse from './pages/Registrarse'
+import Login from './pages/Login'
 
 function App() {
   return (
@@ -19,7 +21,8 @@ function App() {
           <Route path="/tags" element={<Tags />} />
           <Route path="/post/:id" element={<PostDetail />} />
           <Route path="/create" element={<CreatePost />} />
-          {/* Puedes agregar más rutas aquí */}
+          <Route path="/registroUsuario" element={<Registrarse />} />
+          <Route path="/inicioSesion" element={<Login />} />
         </Routes>
       </Container>
     </>
