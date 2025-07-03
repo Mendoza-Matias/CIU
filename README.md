@@ -1,12 +1,59 @@
-# React + Vite
+# UnaHur Anti-Social Net - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este proyecto realiza el frontend para el Segundo Parcial de la materia Construcción de Interfaces de usuario. El mismo se realizó con React usando como backend la API proporcionada. Permite trabajar con publicaciones, usuarios, comentarios y etiquetas.
 
-Currently, two official plugins are available:
+> Este proyecto está pensado para usarse con la API dada.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## Requisitos
+- Git instalado y configurado 
+- Node.js instalado (versión recomendada: 16 o superior)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## Instalación
+
+1. Clonarse el siguiente repositorio mediante Git: https://github.com/lucasfigarola/backend-api
+2. Abrir una terminal dentro de la carpeta `backend-api` (nombre por defecto de la carpeta clonada).
+3. Instalar las dependencias:
+
+```bash
+npm install
+```
+
+4. Crear y poblar la base de datos con datos de ejemplo:
+
+```bash
+node seed.js
+```
+
+5. Iniciar el servidor:
+
+```bash
+npm start
+```
+6. Clonarse, en una carpeta distinta, este repositorio mediante Git.
+7. Abrir una terminal dentro de la carpeta `CIU` (nombre por defecto de la carpeta clonada). 
+8. Instalar las dependencias:
+
+```bash
+npm install
+```
+9. Iniciar la aplicacicón:
+
+```bash
+npm start
+```
+10. Hacer click en el link generado por la aplicación una vez esté corriendo.
+---
+
+## Ejecución de la aplicación
+
+Una vez iniciado, la aplicación quedará disponible por defecto en:
+
+```
+http://localhost:5173
+```
+
+
