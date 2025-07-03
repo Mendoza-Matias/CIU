@@ -6,7 +6,7 @@ import { Routes, Route } from 'react-router-dom'; // <--- Elimina 'BrowserRouter
 import { Container } from 'react-bootstrap';
 import Tags from './pages/Tags';
 import PostDetail from './components/PostDetail';
-import CreatePost from './components/CreatePost';
+import CreatePost from './pages/CreatePost';
 import Registrarse from './pages/Registrarse';
 import Login from './pages/Login';
 import { AuthProvider } from './context/AuthContext'; // Importa el AuthProvider

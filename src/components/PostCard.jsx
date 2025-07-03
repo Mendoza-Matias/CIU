@@ -64,9 +64,11 @@ function PostCard({ post }) {
 
                 {/* Footer con comentarios y botón */}
                 <div className="d-flex justify-content-between align-items-center">
+                    {/*
                     <small className="text-muted">
                         💬 {post.commentsCount || 0} comentario{(post.commentsCount || 0) !== 1 ? 's' : ''}
                     </small>
+                    */}
                     <Button
                         variant="primary"
                         size="sm"
