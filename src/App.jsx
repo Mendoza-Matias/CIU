@@ -6,6 +6,7 @@ import { Routes, Route } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
 import Tags from './pages/Tags'
 import PostDetail from './components/PostDetail'
+import CreatePost from './components/CreatePost'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/user" element={<User />} />
           <Route path="/tags" element={<Tags />} />
           <Route path="/post/:id" element={<PostDetail />} />
+          <Route path="/create" element={<CreatePost />} />
           {/* Puedes agregar más rutas aquí */}
         </Routes>
       </Container>
