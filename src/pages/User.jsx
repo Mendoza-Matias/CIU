@@ -1,65 +1,41 @@
-import { useEffect, useState } from 'react'
-import { Container, Card, Spinner, Alert, Row, Col, Badge } from 'react-bootstrap'
-import NavigationBar from '../components/Nav'
+import React, { useEffect, useState, useContext } from 'react'; // Importa useContext
+import { Container, Card, Spinner, Alert, Row, Col, Badge } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom'; // Importa useNavigate
+import { AuthContext } from '../context/AuthContext'; // Asegúrate de que la ruta sea correcta
 
 function User() {
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const navigate = useNavigate();
+  // Obtén el usuario y el estado de autenticación del AuthContext
+  const { user: loggedInUser, isAuthenticated } = useContext(AuthContext);
 
+  // No necesitamos un estado 'user' local ni un loading/error para el fetch de un ID fijo.
+  // El 'loading' y 'error' ahora se manejarían si hubieras una API compleja para el perfil
+  // que usara el ID del loggedInUser, pero para este caso simplificado no son necesarios aquí.
+
+  // Efecto para redirigir si el usuario no está logueado
   useEffect(() => {
-    fetch('http://localhost:3001/users/1')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Error al obtener el usuario')
-        }
-        return response.json()
-      })
-      .then((data) => {
-        setUser(data)
-        setLoading(false)
-      })
-      .catch((err) => {
-        setError(err.message)
-        setLoading(false)
-      })
-  }, [])
+    if (!isAuthenticated) {
+      // Si no hay un usuario autenticado, redirige a la página de login
+      navigate('/inicioSesion'); // O '/login' si esa es tu ruta
+    }
+  }, [isAuthenticated, navigate]); // Dependencias: se ejecuta cuando cambian isAuthenticated o navigate
 
-  if (loading) {
+  // Si no está autenticado, no renderizamos nada (la redirección se encargará)
+  // O puedes mostrar un spinner o un mensaje mientras se resuelve la redirección
+  if (!isAuthenticated) {
     return (
-      <div>
-        {/* <NavigationBar /> */}
-        <Container className="mt-5">
-          <div className="text-center py-5">
-            <Spinner animation="border" variant="primary" />
-            <p className="mt-3 text-muted">Cargando información del usuario...</p>
-          </div>
-        </Container>
-      </div>
-    )
+      <Container className="mt-5 text-center">
+        <Spinner animation="border" variant="primary" />
+        <p className="mt-3 text-muted">Redirigiendo al inicio de sesión...</p>
+      </Container>
+    );
   }
 
-  if (error) {
-    return (
-      <div>
-        {/* <NavigationBar /> */}
-        <Container className="mt-5">
-          <Alert variant="danger">
-            <Alert.Heading>¡Ups! Algo salió mal</Alert.Heading>
-            <p>{error}</p>
-            <hr />
-            <p className="mb-0">
-              Por favor, intenta recargar la página o contacta al soporte si el problema persiste.
-            </p>
-          </Alert>
-        </Container>
-      </div>
-    )
-  }
-
+  // Ahora 'loggedInUser' contiene los datos del usuario logueado.
+  // Si llegamos aquí, 'isAuthenticated' es true y 'loggedInUser' tiene los datos.
   return (
     <div>
-      {/* <NavigationBar /> */}
+      {/* <NavigationBar /> // Generalmente NavigationBar está en App.jsx */}
       <Container className="mt-5">
         <Row className="justify-content-center">
           <Col lg={8} xl={6}>
@@ -79,11 +55,11 @@ function User() {
                     style={{ width: '60px', height: '60px' }}
                   >
                     <span className="text-primary fs-2 fw-bold">
-                      {user.nickName?.charAt(0).toUpperCase()}
+                      {loggedInUser.nickName?.charAt(0).toUpperCase()}
                     </span>
                   </div>
                   <div>
-                    <h3 className="mb-1">{user.nickName}</h3>
+                    <h3 className="mb-1">{loggedInUser.nickName}</h3>
                     <Badge bg="light" text="primary">Usuario Activo</Badge>
                   </div>
                 </div>
@@ -95,7 +71,7 @@ function User() {
                   <div className="col-12">
                     <div className="p-3 bg-light rounded">
                       <small className="text-muted fw-semibold d-block mb-1">ID DE USUARIO</small>
-                      <span className="fs-5">{user.id}</span>
+                      <span className="fs-5">{loggedInUser.id}</span>
                     </div>
                   </div>
 
@@ -103,7 +79,7 @@ function User() {
                   <div className="col-12">
                     <div className="p-3 bg-light rounded">
                       <small className="text-muted fw-semibold d-block mb-1">NOMBRE DE USUARIO</small>
-                      <span className="fs-5">@{user.nickName}</span>
+                      <span className="fs-5">@{loggedInUser.nickName}</span>
                     </div>
                   </div>
 
@@ -111,17 +87,17 @@ function User() {
                   <div className="col-12">
                     <div className="p-3 bg-light rounded">
                       <small className="text-muted fw-semibold d-block mb-1">CORREO ELECTRÓNICO</small>
-                      <span className="fs-5">{user.email}</span>
+                      <span className="fs-5">{loggedInUser.email}</span>
                     </div>
                   </div>
 
                   {/* Fecha de Creación */}
-                  {user.createdAt && (
+                  {loggedInUser.createdAt && (
                     <div className="col-12">
                       <div className="p-3 bg-light rounded">
                         <small className="text-muted fw-semibold d-block mb-1">MIEMBRO DESDE</small>
                         <span className="fs-5">
-                          {new Date(user.createdAt).toLocaleDateString('es-ES', {
+                          {new Date(loggedInUser.createdAt).toLocaleDateString('es-ES', {
                             year: 'numeric',
                             month: 'long',
                             day: 'numeric'
@@ -152,7 +128,7 @@ function User() {
         </Row>
       </Container>
     </div>
-  )
+  );
 }
 
-export default User
+export default User;
