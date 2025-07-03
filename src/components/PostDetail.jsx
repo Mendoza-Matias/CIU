@@ -17,7 +17,6 @@ function PostDetail() {
     const [currentUser, setCurrentUser] = useState(null);
 
     useEffect(() => {
-        // Simular usuario actual (en una app real vendría del contexto de autenticación)
         setCurrentUser({
             id: 1,
             nickName: "luna",
@@ -30,13 +29,11 @@ function PostDetail() {
             return;
         }
 
-        // Cargar post y comentarios
         loadPostAndComments();
     }, [id]);
 
     const loadPostAndComments = async () => {
         try {
-            // Cargar el post
             const postResponse = await fetch(`http://localhost:3001/posts/${id}`);
             if (!postResponse.ok) {
                 throw new Error('Error al obtener el post');
@@ -44,12 +41,9 @@ function PostDetail() {
             const postData = await postResponse.json();
             setPost(postData);
 
-            // Cargar imágenes del post
             await loadPostImages();
 
-            // Cargar comentarios
-            await loadComments();
-            
+            await loadComments();            
         } catch (err) {
             setError(err.message);
             console.error(err);
@@ -66,7 +60,6 @@ function PostDetail() {
                 setPostImages(imagesData);
                 console.log("Imágenes cargadas:", imagesData);
             } else {
-                // Si no hay imágenes o el endpoint falla
                 setPostImages([]);
             }
         } catch (err) {
@@ -77,13 +70,11 @@ function PostDetail() {
 
     const loadComments = async () => {
         try {
-            // Ajustar para usar el endpoint correcto de comentarios
             const commentsResponse = await fetch(`http://localhost:3001/comments/post/${id}`);
             if (commentsResponse.ok) {
                 const commentsData = await commentsResponse.json();
                 setComments(commentsData);
             } else {
-                // Si no hay endpoint específico, usar comentarios mock para demo
                 setComments([
                     {
                         id: 1,
@@ -113,7 +104,6 @@ function PostDetail() {
             }
         } catch (err) {
             console.error('Error loading comments:', err);
-            // Usar comentarios mock para demo
             setComments([]);
         }
     };
@@ -126,14 +116,13 @@ function PostDetail() {
         setCommentError(null);
 
         try {
-            // Estructura que coincide exactamente con tu backend
             const commentData = {
                 content: commentText,
                 userId: currentUser.id,
                 postId: parseInt(id)
             };
 
-            console.log("Enviando comentario:", commentData); // Para debug
+            console.log("Enviando comentario:", commentData);
 
             const response = await fetch(`http://localhost:3001/comments`, {
                 method: 'POST',
@@ -147,7 +136,6 @@ function PostDetail() {
                 const newComment = await response.json();
                 console.log("Comentario creado:", newComment);
                 
-                // Agregar información del usuario al comentario para mostrarlo
                 const commentWithUser = {
                     ...newComment,
                     User: currentUser
@@ -256,9 +244,7 @@ function PostDetail() {
                             </Button>
                         </div>
 
-                        {/* Card principal del post */}
                         <Card className="shadow-sm border-0">
-                            {/* Header del post */}
                             <Card.Header className="bg-white border-bottom py-4">
                                 <div className="d-flex justify-content-between align-items-start">
                                     <div>
@@ -273,7 +259,6 @@ function PostDetail() {
                                 </div>
                             </Card.Header>
 
-                            {/* Contenido del post */}
                             <Card.Body className="p-4">
                                 <div className="mb-4">
                                     <p className="fs-5 lh-base mb-0" style={{ whiteSpace: 'pre-wrap' }}>
@@ -281,7 +266,6 @@ function PostDetail() {
                                     </p>
                                 </div>
 
-                                {/* Imágenes del post */}
                                 {postImages && postImages.length > 0 && (
                                     <div className="mb-4">
                                         <h6 className="text-muted mb-3">📸 Imágenes:</h6>
@@ -302,18 +286,15 @@ function PostDetail() {
                                                                 cursor: "pointer"
                                                             }}
                                                             onClick={() => {
-                                                                // Abrir imagen en modal o nueva pestaña
                                                                 window.open(imageObj.url || imageObj.imagePath || imageObj, '_blank');
                                                             }}
                                                         />
-                                                        {/* Badge con número de imagen */}
                                                         <Badge 
                                                             bg="dark" 
                                                             className="position-absolute top-0 start-0 m-2"
                                                         >
                                                             {index + 1}
                                                         </Badge>
-                                                        {/* Descripción de la imagen si existe */}
                                                         {imageObj.description && (
                                                             <div className="position-absolute bottom-0 start-0 end-0 bg-dark bg-opacity-75 text-white p-2 rounded-bottom">
                                                                 <small>{imageObj.description}</small>
@@ -331,7 +312,6 @@ function PostDetail() {
                                     </div>
                                 )}
 
-                                {/* Etiquetas */}
                                 {post.Tags && post.Tags.length > 0 && (
                                     <div className="mb-4">
                                         <h6 className="text-muted mb-2">🏷️ Etiquetas:</h6>
@@ -350,7 +330,6 @@ function PostDetail() {
                                 )}
                             </Card.Body>
 
-                            {/* Footer con información adicional */}
                             <Card.Footer className="bg-light py-3">
                                 <div className="d-flex justify-content-between align-items-center">
                                     <div className="d-flex gap-3">
@@ -370,7 +349,6 @@ function PostDetail() {
                             </Card.Footer>
                         </Card>
 
-                        {/* Sección de comentarios */}
                         <Card className="mt-4 shadow-sm border-0">
                             <Card.Header className="bg-light d-flex justify-content-between align-items-center">
                                 <h6 className="mb-0">💬 Comentarios ({comments.length})</h6>
@@ -381,7 +359,6 @@ function PostDetail() {
                                 )}
                             </Card.Header>
 
-                            {/* Formulario para agregar comentario */}
                             {currentUser && (
                                 <Card.Body className="border-bottom">
                                     <Form onSubmit={handleCommentSubmit}>
@@ -431,7 +408,6 @@ function PostDetail() {
                                 </Card.Body>
                             )}
 
-                            {/* Lista de comentarios */}
                             <Card.Body className="p-0">
                                 {comments.length === 0 ? (
                                     <div className="text-center py-5">
@@ -472,7 +448,6 @@ function PostDetail() {
                             </Card.Body>
                         </Card>
 
-                        {/* Información adicional */}
                         <Alert variant="info" className="mt-4">
                             <Alert.Heading className="h6">
                                 💡 ¿Te gustó esta publicación?

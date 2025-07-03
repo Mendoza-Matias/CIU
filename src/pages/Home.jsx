@@ -52,7 +52,6 @@ function Home() {
                 </Container>
             </div>
 
-            {/* Resto del código igual... */}
             <Container>
                 <Row>
                     <Col lg={8} className="mx-auto">

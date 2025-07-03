@@ -1,33 +1,26 @@
 import React, { useState } from 'react';
 import { Card, Form, Button, Alert } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom'; // Para la redirección
+import { useNavigate } from 'react-router-dom';
 
 function Registrarse() {
     const navigate = useNavigate();
-
-    // Estado para los valores del formulario
     const [formData, setFormData] = useState({
         nickName: '',
         email: ''
     });
-
-    // Estado para los errores de validación del frontend
     const [errors, setErrors] = useState({});
 
-    // Estado para el mensaje general de estado del envío (éxito/error)
     const [submissionStatus, setSubmissionStatus] = useState({
         message: '',
-        type: '' // 'success' o 'danger'
+        type: ''
     });
 
-    // Maneja los cambios en los inputs del formulario
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
             ...formData,
             [name]: value
         });
-        // Limpia el error del campo actual cuando el usuario empieza a escribir
         if (errors[name]) {
             setErrors(prevErrors => {
                 const newErrors = { ...prevErrors };
@@ -36,8 +29,6 @@ function Registrarse() {
             });
         }
     };
-
-    // Validación del formulario en el frontend
     const validate = () => {
         const newErrors = {};
 
@@ -47,20 +38,17 @@ function Registrarse() {
 
         if (!formData.email.trim()) {
             newErrors.email = 'El email es obligatorio.';
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) { // Regex simple para email
+        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
             newErrors.email = 'Por favor, introduce un formato de email válido.';
         }
 
         setErrors(newErrors);
-        return Object.keys(newErrors).length === 0; // Retorna true si no hay errores
+        return Object.keys(newErrors).length === 0;
     };
 
-    // Maneja el envío del formulario
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Previene el comportamiento por defecto del formulario
-
-        setSubmissionStatus({ message: '', type: '' }); // Limpia el estado anterior
-
+        e.preventDefault();
+        setSubmissionStatus({ message: '', type: '' });
         if (!validate()) {
             setSubmissionStatus({
                 message: 'Por favor, corrige los errores en el formulario.',
@@ -70,7 +58,7 @@ function Registrarse() {
         }
 
         try {
-            const response = await fetch('http://localhost:3001/users', { // URL del endpoint POST /users
+            const response = await fetch('http://localhost:3001/users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -79,19 +67,15 @@ function Registrarse() {
             });
 
             if (response.ok) {
-                // Registro exitoso
                 setSubmissionStatus({
                     message: '¡Bienvenido! Te has registrado exitosamente. Redirigiendo al login...',
                     type: 'success'
                 });
-                setFormData({ nickName: '', email: '' }); // Limpiar el formulario
-
-                // Redirigir al login después de un breve retraso
+                setFormData({ nickName: '', email: '' });
                 setTimeout(() => {
-                    navigate('/inicioSesion'); // Asume que tu ruta de login es '/login'
-                }, 3000); // Redirige después de 3 segundos
+                    navigate('/inicioSesion');
+                }, 3000);
             } else {
-                // Errores del backend (ej. nickName o email ya existen)
                 const errorData = await response.json();
                 setSubmissionStatus({
                     message: errorData.message || 'Error al registrar el usuario. Intenta con otro nombre de usuario o email.',
@@ -99,7 +83,6 @@ function Registrarse() {
                 });
             }
         } catch (error) {
-            // Errores de red o inesperados
             console.error('Error de conexión o inesperado:', error);
             setSubmissionStatus({
                 message: 'No se pudo conectar con el servidor. Por favor, inténtalo de nuevo más tarde.',
@@ -113,8 +96,6 @@ function Registrarse() {
             <Card style={{ width: '25rem' }} className="shadow-lg">
                 <Card.Body>
                     <h2 className="text-center mb-4">Registrarse</h2>
-
-                    {/* Mensajes de estado general del formulario */}
                     {submissionStatus.message && (
                         <Alert variant={submissionStatus.type} className="text-center">
                             {submissionStatus.message}
@@ -130,10 +111,8 @@ function Registrarse() {
                                 value={formData.nickName}
                                 onChange={handleChange}
                                 placeholder="tu_nick_asombroso"
-                                // 'isInvalid' se activa si hay un error para este campo
                                 isInvalid={!!errors.nickName}
                             />
-                            {/* Feedback de error bajo el campo */}
                             <Form.Control.Feedback type="invalid">
                                 {errors.nickName}
                             </Form.Control.Feedback>

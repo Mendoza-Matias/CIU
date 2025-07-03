@@ -42,7 +42,6 @@ function Tags() {
     if (error) {
         return (
             <div>
-                {/* <NavigationBar /> */}
                 <Container className="mt-5">
                     <Alert variant="danger">
                         <Alert.Heading>¡Error!</Alert.Heading>
@@ -55,11 +54,9 @@ function Tags() {
 
     return (
         <div>
-            {/* <NavigationBar /> */}
             <Container className="mt-5">
                 <Row className="justify-content-center">
                     <Col lg={10} xl={8}>
-                        {/* Header */}
                         <div className="text-center mb-5">
                             <h1 className="display-6 fw-bold text-primary mb-2">
                                 🏷️ Etiquetas
@@ -69,7 +66,6 @@ function Tags() {
                             </p>
                         </div>
 
-                        {/* Estadísticas */}
                         <Card className="mb-4 border-0 bg-light">
                             <Card.Body className="text-center py-3">
                                 <small className="text-muted">
@@ -87,7 +83,6 @@ function Tags() {
                             </Alert>
                         ) : (
                             <>
-                                {/* Vista de Grid con Badges */}
                                 <Card className="shadow-sm border-0">
                                     <Card.Header className="bg-primary text-white">
                                         <h5 className="mb-0">🎯 Todas las Etiquetas</h5>
@@ -119,7 +114,6 @@ function Tags() {
                                     </Card.Body>
                                 </Card>
 
-                                {/* Vista de Lista alternativa */}
                                 <Card className="mt-4 shadow-sm border-0">
                                     <Card.Header className="bg-light">
                                         <h6 className="mb-0 text-muted">📋 Vista de Lista</h6>

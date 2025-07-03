@@ -4,15 +4,14 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 
-import { AuthContext } from '../context/AuthContext'; // Asegúrate de que la ruta sea correcta
-
+import { AuthContext } from '../context/AuthContext';
 function NavigationBar() {
   const { isAuthenticated, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout(); // Llama a la función de logout del contexto
-    navigate('/inicioSesion'); // Redirige al usuario a la página de inicio de sesión
+    logout(); 
+    navigate('/inicioSesion'); 
   };
 
   return (
@@ -28,8 +27,7 @@ function NavigationBar() {
               Inicio
             </Nav.Link>
             
-            {/* NUEVO: Ocultar/mostrar "Usuario" basado en isAuthenticated */}
-            {isAuthenticated && ( // Solo renderiza si isAuthenticated es true
+            {isAuthenticated && ( 
               <Nav.Link as={NavLink} to="/user">
                 Usuario
               </Nav.Link>
@@ -39,7 +37,6 @@ function NavigationBar() {
               Tags
             </Nav.Link>
 
-            {/* Mantener la lógica existente para Registrarse/Iniciar sesión/Cerrar sesión */}
             {!isAuthenticated ? (
               <>
                 <Nav.Link as={NavLink} to="/registroUsuario">
